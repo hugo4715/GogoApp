@@ -8,11 +8,13 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:gogo_app/data/anime.dart';
 
 import 'animeplaypage.dart';
+import 'data/user.dart';
 
 class AnimePageArguments{
   final String animeId;
+  final User user;
 
-  AnimePageArguments(this.animeId);
+  AnimePageArguments(this.animeId, this.user);
 }
 
 class AnimePage extends StatefulWidget {
@@ -20,8 +22,8 @@ class AnimePage extends StatefulWidget {
   static const route = '/anime';
 
   final String animeId;
-
-  const AnimePage({Key? key, required this.animeId}) : super(key: key);
+  final User user;
+  const AnimePage({Key? key, required this.animeId, required this.user}) : super(key: key);
 
   @override
   State<AnimePage> createState() => _AnimePageState();
@@ -30,6 +32,8 @@ class AnimePage extends StatefulWidget {
 class _AnimePageState extends State<AnimePage> {
   late Future<Anime> futureAnime;
   late Future<File> cover;
+  bool loadingMedia = false;
+
   @override
   void initState() {
     super.initState();
@@ -106,7 +110,7 @@ class _AnimePageState extends State<AnimePage> {
                           trailing: ElevatedButton(
                             child: const Text('Play'),
                             onPressed: (){
-                              play(context, anime, index+1);
+                              playButton(context, anime, index+1);
                             },
                           ),
                         );
@@ -126,9 +130,44 @@ class _AnimePageState extends State<AnimePage> {
     );
   }
 
-  void play(var ctx, Anime anime, int id) {
-    print("Starting playback of ${anime.name} episode $id");
-    Navigator.push(ctx, MaterialPageRoute(builder: (context) => AnimePlayPage(anime: anime, episode: id,)),);
+  void playButton(var ctx, Anime anime, int episode) {
+    print("Starting playback of ${anime.name} episode $episode");
+
+    Future<List<StreamingUrl>> urls = anime.fetchStreamUrl(widget.user, episode);
+
+    showDialog(
+        context: context,
+        builder: (ctx) {
+          return AlertDialog(
+            title: Text("Episode $episode - Quality"),
+            content: FutureBuilder<List<StreamingUrl>>(
+              future: urls,
+              builder: (ctx, snapshot){
+                if(snapshot.hasData){
+                  print('hasData=true');
+                  return Column(
+                    children: snapshot.data!.map((e) => ListTile(
+                      title: Text(e.quality),
+                      trailing: ElevatedButton(onPressed: (){play(anime, episode, e);}, child: Text('Play')),
+                    )).toList(),
+                  );
+                }else if(snapshot.hasError){
+                  return Text(snapshot.error.toString());
+                }
+                return const Center(child: CircularProgressIndicator(),);
+              },
+            ),
+          );
+        }
+    );
+  }
+
+  void play(Anime anime, int episode, StreamingUrl url) async{
+    setState(() {
+      loadingMedia = true;
+    });
+    var realUrl = await url.fetchMediaUrl();
+    Navigator.push(context, MaterialPageRoute(builder: (ctx) => AnimePlayPage(anime: anime, episode: episode, user: widget.user, url: realUrl)));
   }
 }
 

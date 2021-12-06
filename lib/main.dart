@@ -30,6 +30,7 @@ class GogoApp extends StatelessWidget {
             builder: (context) {
               return AnimePage(
                 animeId: args.animeId,
+                user: args.user,
               );
             },
           );

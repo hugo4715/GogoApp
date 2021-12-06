@@ -437,9 +437,9 @@ packages:
   video_player:
     dependency: "direct main"
     description:
-      name: video_player
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "../plugins/packages/video_player/video_player"
+      relative: true
+    source: path
     version: "2.2.7"
   video_player_platform_interface:
     dependency: transitive

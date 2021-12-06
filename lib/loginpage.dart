@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gogo_app/animepage.dart';
+import 'package:gogo_app/helper.dart';
 import 'package:gogo_app/homepage.dart';
 
 import 'data/user.dart';
@@ -26,6 +27,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+    onlyPortrait();
     User.getCachedUser().then(loginSuccess, onError: errorFetchingUser);
   }
   void errorFetchingUser(error){
@@ -36,10 +38,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
 
     return Scaffold(
         appBar: AppBar(
@@ -110,7 +108,7 @@ class _LoginPageState extends State<LoginPage> {
   void loginSuccess(User user){
     print('loginSuccess');
     //Navigator.pushReplacementNamed(context, '/home', arguments: HomePageArguments(user));
-    Navigator.pushReplacementNamed(context, '/anime', arguments: AnimePageArguments('mieruko-chan'));
+    Navigator.pushReplacementNamed(context, '/anime', arguments: AnimePageArguments('mieruko-chan', user));
   }
 
   void loginError(var error){

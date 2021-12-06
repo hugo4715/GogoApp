@@ -7,7 +7,10 @@ import 'package:html/parser.dart' as html_parser;
 import 'package:collection/collection.dart';
 import 'package:http/http.dart' as http;
 import 'package:gogo_app/settings.dart';
+import 'package:http/http.dart';
 import 'dart:math';
+
+import 'user.dart';
 
 class Anime {
   static final CacheManager cacheManager = DefaultCacheManager();
@@ -40,23 +43,21 @@ class Anime {
     return 'Episode ${id}';
   }
 
-  Future<List<StreamingUrl>> fetchStreamUrl(int episode) async{
+  Future<List<StreamingUrl>> fetchStreamUrl(User user, int episode) async{
     print('fetchStreamUrl ');
     try{
-      var resp = await http.get(Uri.parse(gogoDomain + '/' + id + '-episode-' + episode.toString()));
+      var resp = await http.get(Uri.parse(gogoDomain + '/' + id + '-episode-' + episode.toString()), headers: {
+        'cookie': "${user.authCookie.name}=${user.authCookie.value}"
+      });
       print("code=${resp.statusCode}");
       if(resp.statusCode >= 200 && resp.statusCode < 300){
         var doc = html_parser.parseFragment(resp.body);
         List<StreamingUrl> urls = [];
         var links = doc.querySelectorAll('.cf-download a');
-        LogPrint(resp.body + 'test');
           for(var el in links){
-            print('d');
             var url = el.attributes['href'];
-
             urls.add(StreamingUrl(el.text.trim(), url!));
           }
-        print('returns');
           return urls;
       }  else{
         return Future.error('Error while fetching episode url ' + id + ' (http ' + resp.statusCode.toString() + ')');
@@ -131,6 +132,16 @@ class StreamingUrl{
   @override
   String toString() {
     return "StreamingUrl {quality: $quality, url: $url}";
+  }
+
+  Future<String> fetchMediaUrl() async{
+    http.Request req = http.Request("GET", Uri.parse(url))..followRedirects = false;
+    http.Client baseClient = http.Client();
+    http.StreamedResponse response = await baseClient.send(req);
+    if(response.statusCode == 302){
+      return response.headers['location']!;
+    }
+    return Future.error('Error while fetching streaming url! (server did not redirect: ${response.statusCode})');
   }
 }
 
