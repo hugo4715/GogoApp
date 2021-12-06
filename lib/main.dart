@@ -15,10 +15,26 @@ class GogoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'GogoApp',
+      initialRoute: '/login',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const LoginPage(),
+      routes: {
+        '/home': (ctx) => const HomePage(),
+        '/login': (ctx) => const LoginPage(),
+      },
+      onGenerateRoute: (settings){
+        if(settings.name == AnimePage.route){
+          final args = settings.arguments as AnimePageArguments;
+          return MaterialPageRoute(
+            builder: (context) {
+              return AnimePage(
+                animeId: args.animeId,
+              );
+            },
+          );
+        }
+      },
     );
   }
 }

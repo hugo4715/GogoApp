@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -106,7 +107,7 @@ class Anime {
         var resp = await http.get(Uri.parse(gogoDomain + '/category/' + id));
         if(resp.statusCode >= 200 && resp.statusCode < 300){
           content = resp.body;
-          cacheManager.putFile("", Uint8List.fromList(content.codeUnits), key: id);
+          cacheManager.putFile("", Uint8List.fromList(utf8.encode(content)), key: id);
           print("$id put in cache");
         }  else{
           return Future.error('Error while fetching anime ' + id + ' (http ' + resp.statusCode.toString() + ')');

@@ -1,11 +1,24 @@
+
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:gogo_app/data/anime.dart';
 
 import 'animeplaypage.dart';
 
+class AnimePageArguments{
+  final String animeId;
+
+  AnimePageArguments(this.animeId);
+}
+
 class AnimePage extends StatefulWidget {
+  static CacheManager cacheManager = DefaultCacheManager();
+  static const route = '/anime';
+
   final String animeId;
 
   const AnimePage({Key? key, required this.animeId}) : super(key: key);
@@ -16,14 +29,14 @@ class AnimePage extends StatefulWidget {
 
 class _AnimePageState extends State<AnimePage> {
   late Future<Anime> futureAnime;
-
+  late Future<File> cover;
   @override
   void initState() {
     super.initState();
-
-    futureAnime = Anime.fetchById(this.widget.animeId);
+    futureAnime = Anime.fetchById(widget.animeId);
     futureAnime.then(print);
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +64,7 @@ class _AnimePageState extends State<AnimePage> {
                         children: <Widget>[
                           CachedNetworkImage(
                             imageUrl: anime.coverUrl,
-                            progressIndicatorBuilder: (context, url, downloadProgress) => Center(child: CircularProgressIndicator(value: downloadProgress.progress),),
+                            progressIndicatorBuilder: (context, url, downloadProgress) => Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
                             errorWidget: (context, url, error) => const Icon(Icons.error),
                             fit: BoxFit.cover,
                           ),
