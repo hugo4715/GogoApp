@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:gogo_app/animepage.dart';
+import 'package:gogo_app/page/animepage.dart';
+import 'package:gogo_app/page/homepage.dart';
 
-import 'homepage.dart';
-import 'loginpage.dart';
+import 'page/loginpage.dart';
 
 void main() {
   runApp(const GogoApp());
