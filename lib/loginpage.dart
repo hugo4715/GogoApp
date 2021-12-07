@@ -37,6 +37,12 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   @override
+  void dispose() {
+    allOrientation();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     return Scaffold(
@@ -108,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
   void loginSuccess(User user){
     print('loginSuccess');
     //Navigator.pushReplacementNamed(context, '/home', arguments: HomePageArguments(user));
-    Navigator.pushReplacementNamed(context, '/anime', arguments: AnimePageArguments('mieruko-chan', user));
+    Navigator.pushReplacementNamed(context, '/anime', arguments: AnimePageArguments('tenki-no-ko', user));
   }
 
   void loginError(var error){

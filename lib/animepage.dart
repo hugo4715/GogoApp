@@ -41,7 +41,6 @@ class _AnimePageState extends State<AnimePage> {
     futureAnime.then(print);
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,7 +66,7 @@ class _AnimePageState extends State<AnimePage> {
                         fit: StackFit.expand,
                         children: <Widget>[
                           CachedNetworkImage(
-                            imageUrl: anime.coverUrl,
+                            imageUrl: anime.coverUrl!,
                             progressIndicatorBuilder: (context, url, downloadProgress) => Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
                             errorWidget: (context, url, error) => const Icon(Icons.error),
                             fit: BoxFit.cover,
@@ -93,7 +92,7 @@ class _AnimePageState extends State<AnimePage> {
                       Container(
                         margin: const EdgeInsets.all(10),
                         child: Text(
-                          anime.shortPlot,
+                          anime.shortPlot!,
                           maxLines: 4,
                           overflow: TextOverflow.fade,
                           style: const TextStyle(color: Color(0x80000000)),

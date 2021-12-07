@@ -16,21 +16,21 @@ class Anime {
   static final CacheManager cacheManager = DefaultCacheManager();
   final String id;
   final String name;
-  final String type;
-  final String plot;
-  final String coverUrl;
-  final int episodeCount;
-  late String shortPlot;
+  String? type;
+  String? plot;
+  String? coverUrl;
+  int? episodeCount;
+  String? shortPlot;
 
   Anime({
     required this.id,
     required this.name,
-    required this.episodeCount,
-    required this.plot,
-    required this.coverUrl,
-    required this.type,
+    this.episodeCount,
+    this.plot,
+    this.coverUrl,
+    this.type,
   }){
-    shortPlot = plot.substring(0, 101+plot.substring(100).indexOf('.'));
+    shortPlot = plot?.substring(0, 101+plot!.substring(100).indexOf('.'));
   }
 
   @override
