@@ -2,7 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_search_bar/flutter_search_bar.dart';
 import 'package:gogo_app/data/anime.dart';
+import 'package:gogo_app/data/search.dart';
+import 'package:gogo_app/widget/animelist.dart';
 import 'package:provider/provider.dart';
 
 import '../data/user.dart';
@@ -21,10 +24,36 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late SearchBar searchBar;
+  Future<List<Anime>>? futureSearch;
+
+  _HomePageState() {
+    searchBar = SearchBar(
+      inBar: false,
+      setState: setState,
+      onSubmitted: onSearch,
+      buildDefaultAppBar: buildAppBar,
+      hintText: "Search anime",
+    );
+  }
+
 
   @override
   void initState() {
     super.initState();
+  }
+
+  AppBar buildAppBar(BuildContext context) {
+    return AppBar(
+        title: const Text('GogoAnime'),
+        actions: [searchBar.getSearchAction(context)]
+    );
+  }
+
+  void onSearch(String query){
+    final args = ModalRoute.of(context)!.settings.arguments as HomePageArguments;
+
+    futureSearch = search(args.user, query);
   }
 
   @override
@@ -32,34 +61,40 @@ class _HomePageState extends State<HomePage> {
     final args = ModalRoute.of(context)!.settings.arguments as HomePageArguments;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('GogoApp'),
-      ),
+      appBar: searchBar.build(context),
       body: Provider<User>(
         create: (ctx) => args.user,
-        child: const HomePageContent(),
+        child: Container(
+          child: buildSearch(context),
+        ),
       ),
     );
   }
-}
 
-class HomePageContent extends StatefulWidget {
-  const HomePageContent({Key? key}) : super(key: key);
+  Widget buildSearch(BuildContext context) {
+    if(futureSearch == null) {
+      return Container();
+    }
 
-  @override
-  _HomePageContentState createState() => _HomePageContentState();
-}
-
-class _HomePageContentState extends State<HomePageContent> {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Consumer<User>(
-        builder: (ctx, user, _){
-          return Text(user.username);
-        },
-      ),
+    return FutureBuilder<List<Anime>>(
+      future: futureSearch,
+      builder: (context, snapshot){
+        if(snapshot.hasData && snapshot.data != null){
+          for(var a in snapshot.data!){
+            print('yes there is $a');
+          }
+          return Consumer<User>(
+            builder: (context, user, _) => AnimeList(animeList: snapshot.data!, user: user),
+          );
+        }else if(snapshot.hasError){
+          return Card(
+            child: Center(child: Text(snapshot.data.toString())),
+          );
+        }
+        return const Card(
+          child: Center(child: CircularProgressIndicator()),
+        );
+      }
     );
   }
 }
-

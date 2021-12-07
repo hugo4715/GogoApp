@@ -20,7 +20,6 @@ class Anime {
   String? plot;
   String? coverUrl;
   int? episodeCount;
-  String? shortPlot;
 
   Anime({
     required this.id,
@@ -29,9 +28,7 @@ class Anime {
     this.plot,
     this.coverUrl,
     this.type,
-  }){
-    shortPlot = plot?.substring(0, 101+plot!.substring(100).indexOf('.'));
-  }
+  });
 
   @override
   String toString() {

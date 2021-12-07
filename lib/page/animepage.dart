@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:gogo_app/data/anime.dart';
+import 'package:gogo_app/widget/hiddentext.dart';
 
 import 'animeplaypage.dart';
 import '../data/user.dart';
@@ -44,9 +45,6 @@ class _AnimePageState extends State<AnimePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('GogoApp'),
-      ),
       body: FutureBuilder<Anime>(
         future: futureAnime,
         builder: (ctx, snapshot) {
@@ -56,12 +54,11 @@ class _AnimePageState extends State<AnimePage> {
               return CustomScrollView(
                 slivers: <Widget>[
                   SliverAppBar(
-                    backgroundColor: Color.fromARGB(0, 0, 0, 0),
                     pinned: false,
                     expandedHeight: orientation == Orientation.landscape ? 100 : 350,
                     flexibleSpace: FlexibleSpaceBar(
                       title: Text(anime.name),
-                      stretchModes: [StretchMode.fadeTitle],
+                      stretchModes: const [StretchMode.fadeTitle],
                       background: Stack(
                         fit: StackFit.expand,
                         children: <Widget>[
@@ -91,11 +88,10 @@ class _AnimePageState extends State<AnimePage> {
                     delegate: SliverChildListDelegate([
                       Container(
                         margin: const EdgeInsets.all(10),
-                        child: Text(
-                          anime.shortPlot!,
-                          maxLines: 4,
-                          overflow: TextOverflow.fade,
-                          style: const TextStyle(color: Color(0x80000000)),
+                        child: HiddenText(
+                          text: anime.plot!,
+                          len: 180,
+                          style: const TextStyle(color: Color(0x80000000))
                         ),
                       )
                     ]),

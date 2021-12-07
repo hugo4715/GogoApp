@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gogo_app/data/anime.dart';
 import 'package:gogo_app/helper.dart';
+import 'package:gogo_app/widget/customcontrols.dart';
 import 'package:video_player/video_player.dart';
 
 import '../data/user.dart';
@@ -37,7 +38,7 @@ class _AnimePlayPageState extends State<AnimePlayPage> {
       autoPlay: true,
       looping: true,
       fullScreenByDefault: true,
-      allowFullScreen: false,
+      customControls: GogoControls()
     );
   }
 
