@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gogo_app/data/anime.dart';
-import 'package:gogo_app/data/user.dart';
 import 'package:provider/provider.dart';
 
+import '../data/user.dart';
 
 class HomePageArguments{
   final User user;

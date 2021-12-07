@@ -5,10 +5,11 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:gogo_app/page/animepage.dart';
 import 'package:gogo_app/helper.dart';
 
 import '../data/user.dart';
+import 'animepage.dart';
+import 'homepage.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -33,6 +34,12 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       canType=true;
     });
+  }
+
+  @override
+  void dispose() {
+    allOrientation();
+    super.dispose();
   }
 
   @override
@@ -106,8 +113,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void loginSuccess(User user){
     print('loginSuccess');
-    //Navigator.pushReplacementNamed(context, '/home', arguments: HomePageArguments(user));
-    Navigator.pushReplacementNamed(context, '/anime', arguments: AnimePageArguments('nisekoi', user));
+    Navigator.pushReplacementNamed(context, '/home', arguments: HomePageArguments(user));
   }
 
   void loginError(var error){
