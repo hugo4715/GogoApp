@@ -26,6 +26,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late SearchBar searchBar;
   Future<List<Anime>>? futureSearch;
+  late Future<List<Anime>> futurePopular;
 
   _HomePageState() {
     searchBar = SearchBar(
@@ -41,6 +42,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    futurePopular = newAnimes();
   }
 
   AppBar buildAppBar(BuildContext context) {
@@ -52,7 +54,6 @@ class _HomePageState extends State<HomePage> {
 
   void onSearch(String query){
     final args = ModalRoute.of(context)!.settings.arguments as HomePageArguments;
-
     futureSearch = search(args.user, query);
   }
 
@@ -65,9 +66,26 @@ class _HomePageState extends State<HomePage> {
       body: Provider<User>(
         create: (ctx) => args.user,
         child: Container(
-          child: buildSearch(context),
+          child: futureSearch == null ? buildPopular(context) : buildSearch(context),
         ),
       ),
+    );
+  }
+
+  Widget buildPopular(BuildContext context) {
+    return FutureBuilder<List<Anime>>(
+      future: futurePopular,
+     builder: (context, snapshot){
+        if(snapshot.hasData){
+          return Consumer<User>(
+            builder: (context, user, _) => AnimeList(animeList: snapshot.data!, user: user),
+          );
+        }else if(snapshot.hasError){
+          return Text(snapshot.error.toString());
+        }else{
+          return const Center(child: CircularProgressIndicator(),);
+        }
+     },
     );
   }
 

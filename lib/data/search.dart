@@ -29,3 +29,27 @@ Future<List<Anime>> search(User user, String query) async {
   return Future.error('Error while searching (server sent code ${resp.statusCode})');
 
 }
+
+Future<List<Anime>> newAnimes() async {
+  var url = Uri.parse(gogoDomain + '/new-season.html');
+  var resp = await http.get(url);
+
+  if(resp.statusCode == 200){
+    var doc = html_parser.parseFragment(resp.body);
+    List<Anime> list = List.empty(growable: true);
+    for(var item in doc.querySelectorAll('.last_episodes .items li')){
+      var coverUrl = item.querySelector('img')?.attributes['src'];
+      var name = item.querySelector('.name')!.text.trim();
+      var id = item.querySelector('.name a')!.attributes['href']!;
+      id = id.substring(id.lastIndexOf('/')+1);
+      print('popular found $name');
+      list.add(Anime(
+          id: id,
+          name: name,
+          coverUrl: coverUrl
+      ));
+    }
+    return list;
+  }
+  return Future.error('Error while searching (server sent code ${resp.statusCode})');
+}
