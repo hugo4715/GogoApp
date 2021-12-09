@@ -43,6 +43,8 @@ dependencies:
   chewie:
     path: ../plugins/chewie
   flutter_search_bar: ^2.1.0
+  getwidget: ^2.0.4
+  shared_preferences: ^2.0.10
 dev_dependencies:
   flutter_test:
     sdk: flutter

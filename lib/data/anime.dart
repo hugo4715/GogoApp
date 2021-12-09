@@ -30,6 +30,19 @@ class Anime {
     this.type,
   });
 
+  factory Anime.fromJson(dynamic json){
+    return Anime(id: json['id'] , name: json['name'], episodeCount: json['episodeCount'], plot: json['plot'], coverUrl: json['coverUrl'], type: json['type']);
+  }
+
+  Map toJson() => {
+    'id': id,
+    'name': name,
+    'type': type,
+    'plot': plot,
+    'coverUrl': coverUrl,
+    'episodeCount': episodeCount
+  };
+
   @override
   String toString() {
     return 'Anime: {id: ${id}, name: ${name}, cover: ${coverUrl}, plot: ${plot}, episodeCount: ${episodeCount}, type: ${type}}';
@@ -140,26 +153,4 @@ class StreamingUrl{
     }
     return Future.error('Error while fetching streaming url! (server did not redirect: ${response.statusCode})');
   }
-}
-
-void LogPrint(Object object) async {
-int defaultPrintLength = 1020;
-if (object == null || object.toString().length <= defaultPrintLength) {
-print(object);
-} else {
-String log = object.toString();
-int start = 0;
-int endIndex = defaultPrintLength;
-int logLength = log.length;
-int tmpLogLength = log.length;
-while (endIndex < logLength) {
-print(log.substring(start, endIndex));
-endIndex += defaultPrintLength;
-start += defaultPrintLength;
-tmpLogLength -= defaultPrintLength;
-}
-if (tmpLogLength > 0) {
-print(log.substring(start, logLength));
-}
-}
 }

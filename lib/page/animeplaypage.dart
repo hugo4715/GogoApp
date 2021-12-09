@@ -3,6 +3,7 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gogo_app/data/anime.dart';
+import 'package:gogo_app/data/watchlist.dart';
 import 'package:gogo_app/helper.dart';
 import 'package:gogo_app/widget/customcontrols.dart';
 import 'package:video_player/video_player.dart';
@@ -28,7 +29,7 @@ class _AnimePlayPageState extends State<AnimePlayPage> {
   @override
   void initState() {
     super.initState();
-    print(widget.url);
+    storeWatchedAnime(widget.anime);
     _controller = VideoPlayerController.network(widget.url, httpHeaders: {
       'Referer': 'https://www1.gogoanime.cm/',
     });
