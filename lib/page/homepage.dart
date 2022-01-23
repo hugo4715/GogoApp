@@ -44,6 +44,9 @@ class _HomePageState extends State<HomePage> {
       onSubmitted: onSearch,
       buildDefaultAppBar: buildAppBar,
       hintText: "Search anime",
+      closeOnSubmit: false,
+
+      onClosed: () => futureSearch = null,
     );
   }
 
@@ -69,16 +72,16 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: searchBar.build(context),
-      body: SingleChildScrollView(
-        child: futureSearch != null ? buildSearch(context)
-            : Column(
+      body: futureSearch != null ? buildSearch(context)
+          : SingleChildScrollView(
+            child: Column(
                 children: [
                   buildFeatured(),
                   buildRecentlyWatched(context),
                   buildNewSeason(context)
                 ],
-        ),
-      ),
+            ),
+          ),
     );
   }
 
