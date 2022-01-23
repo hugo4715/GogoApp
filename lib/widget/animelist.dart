@@ -15,7 +15,7 @@ class AnimeList extends StatelessWidget {
       crossAxisCount: 2,
       shrinkWrap: true,
       semanticChildCount: animeList.length,
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       crossAxisSpacing: 10,
       mainAxisSpacing: 10,
       children: animeList.map( (anime){
@@ -48,7 +48,7 @@ class AnimeList extends StatelessWidget {
                  left: 10,
                  child: Text(
                    anime.name,
-                   style: TextStyle(
+                   style: const TextStyle(
                      color: Colors.white
                    ),
                  )
@@ -60,14 +60,3 @@ class AnimeList extends StatelessWidget {
     );
   }
 }
-/*
-Column(
-             children: [
-               anime.coverUrl != null ? CachedNetworkImage(
-                 imageUrl: anime.coverUrl!,
-                 fit: BoxFit.cover,
-               ) : const CircularProgressIndicator(),
-               Text(anime.name, softWrap: true, maxLines: 3,)
-             ],
-           ),
- */

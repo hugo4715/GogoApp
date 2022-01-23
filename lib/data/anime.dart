@@ -53,6 +53,46 @@ class Anime {
     return 'Episode ${id}';
   }
 
+  Future<List<StreamingUrl>> fetchStreamUrlXStreamCDN(User user, int episode) async{
+    print('fetchStreamUrlXStreamCDN ');
+    try{
+      var resp = await http.get(Uri.parse(gogoDomain + '/' + id + '-episode-' + episode.toString()), headers: {
+        'cookie': "${user.authCookie.name}=${user.authCookie.value}"
+      });
+      print("code=${resp.statusCode}");
+      if(resp.statusCode >= 200 && resp.statusCode < 300){
+        var doc = html_parser.parseFragment(resp.body);
+        var link = doc.querySelector('.xstreamcdn a');
+        print(link);
+        if(link == null){
+          return Future.error('Error while fetching episode url ' + id + ' (This anime is not hosted on XStreamCDN)');
+        }
+        var apiLink = link.attributes['data-video']!;
+        apiLink = apiLink.replaceAll('https://fembed-hd.com/v/', 'https://fembed-hd.com/api/source/');
+        resp = await http.post(Uri.parse(apiLink));
+        if(resp.statusCode >= 200 && resp.statusCode < 300){
+          print(resp.body);
+          var json = jsonDecode(resp.body);
+          var data = json['data'];
+
+          List<StreamingUrl> urls = [];
+          for(var info in data){
+            var url = info['file'] as String;
+            url.replaceAll('\\', '');
+            urls.add(StreamingUrl(info['label'], url));
+          }
+          return urls;
+        }
+        return Future.error('Error while fetching episode url ' + id + ' (api returned code ${resp.statusCode})');
+
+      }  else{
+        return Future.error('Error while fetching episode url ' + id + ' (http ' + resp.statusCode.toString() + ')');
+      }
+    } on SocketException{
+      return Future.error('Error while fetching episode url ' + id + ' (no internet connection)');
+    }
+  }
+
   Future<List<StreamingUrl>> fetchStreamUrl(User user, int episode) async{
     print('fetchStreamUrl ');
     try{

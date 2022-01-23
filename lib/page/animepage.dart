@@ -5,9 +5,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter_video_cast/flutter_video_cast.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gogo_app/data/anime.dart';
+import 'package:gogo_app/page/castpage.dart';
 import 'package:gogo_app/widget/hiddentext.dart';
 
+import '../helper.dart';
 import 'animeplaypage.dart';
 import '../data/user.dart';
 
@@ -33,7 +37,10 @@ class AnimePage extends StatefulWidget {
 class _AnimePageState extends State<AnimePage> {
   late Future<Anime> futureAnime;
   late Future<File> cover;
-  bool loadingMedia = false;
+
+  late ChromeCastController _controller;
+  AppState _state = AppState.idle;
+  bool _playing = false;
 
   @override
   void initState() {
@@ -54,6 +61,20 @@ class _AnimePageState extends State<AnimePage> {
               return CustomScrollView(
                 slivers: <Widget>[
                   SliverAppBar(
+                    actions: [
+                      Padding(
+                        padding: EdgeInsets.all(20),
+                        child: ChromeCastButton(
+                          size: 50,
+                          color: Colors.white,
+                          onButtonCreated: _onButtonCreated,
+                          onSessionStarted: _onSessionStarted,
+                          onSessionEnded: () => Navigator.pop(context),
+                          onRequestCompleted: _onRequestCompleted,
+                          onRequestFailed: _onRequestFailed,
+                        ),
+                      )
+                    ],
                     pinned: false,
                     expandedHeight: orientation == Orientation.landscape ? 100 : 350,
                     flexibleSpace: FlexibleSpaceBar(
@@ -103,7 +124,7 @@ class _AnimePageState extends State<AnimePage> {
                         return ListTile(
                           title: Text(anime.episodeName(index+1)),
                           trailing: ElevatedButton(
-                            child: const Text('Play'),
+                            child: Text(_state == AppState.idle ? 'Play' : 'Cast'),
                             onPressed: (){
                               playButton(context, anime, index+1);
                             },
@@ -128,7 +149,7 @@ class _AnimePageState extends State<AnimePage> {
   void playButton(var ctx, Anime anime, int episode) {
     print("Starting playback of ${anime.name} episode $episode");
 
-    Future<List<StreamingUrl>> urls = anime.fetchStreamUrl(widget.user, episode);
+    Future<List<StreamingUrl>> urls = anime.fetchStreamUrlXStreamCDN(widget.user, episode);
 
     showDialog(
         context: context,
@@ -158,11 +179,52 @@ class _AnimePageState extends State<AnimePage> {
   }
 
   void play(Anime anime, int episode, StreamingUrl url) async{
-    setState(() {
-      loadingMedia = true;
-    });
     var realUrl = await url.fetchMediaUrl();
-    Navigator.push(context, MaterialPageRoute(builder: (ctx) => AnimePlayPage(anime: anime, episode: episode, user: widget.user, url: realUrl)));
+    if(_state == AppState.idle){
+      Navigator.push(context, MaterialPageRoute(builder: (ctx) => AnimePlayPage(anime: anime, episode: episode, user: widget.user, url: realUrl)));
+    }else{
+      // cast
+      Fluttertoast.showToast(
+          msg: realUrl,
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+      );
+
+      _controller.loadMedia(realUrl);
+      Navigator.push(context, MaterialPageRoute(builder: (content) => CastPage(controller: _controller, anime: anime, playPause: _playPause, playing: _playing)));
+    }
+
+  }
+
+  // CAST
+
+  Future<void> _onButtonCreated(ChromeCastController controller) async {
+    _controller = controller;
+    await _controller.addSessionListener();
+  }
+
+  Future<void> _onSessionStarted() async {
+    setState(() => _state = AppState.connected);
+  }
+
+  Future<void> _onRequestCompleted() async {
+    setState(() {
+      _state = AppState.mediaLoaded;
+    });
+  }
+
+  Future<void> _onRequestFailed(String error) async {
+    Navigator.pop(context);
+  }
+
+  Future<void> _playPause() async {
+    final playing = await _controller.isPlaying();
+    if(playing) {
+      await _controller.pause();
+    } else {
+      await _controller.play();
+    }
+    setState(() => _playing = !playing);
   }
 }
 

@@ -13,6 +13,7 @@ import 'package:gogo_app/widget/animelist.dart';
 import 'package:provider/provider.dart';
 
 import '../data/user.dart';
+import 'animepage.dart';
 
 class HomePageArguments{
   final User user;
@@ -32,6 +33,9 @@ class _HomePageState extends State<HomePage> {
   Future<List<Anime>>? futureSearch;
   late Future<List<Anime>> futureNewAnime;
   late Future<List<Anime>> futureRecentlyWatchedAnime;
+  late Future<Anime> futureFeatured;
+
+  late User user;
 
   _HomePageState() {
     searchBar = SearchBar(
@@ -48,6 +52,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     futureNewAnime = newAnimes();
     futureRecentlyWatchedAnime = getRecentlyWatched();
+    futureFeatured = getFeaturedAnime();
   }
 
   AppBar buildAppBar(BuildContext context) {
@@ -60,19 +65,18 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as HomePageArguments;
+    user = args.user;
 
     return Scaffold(
       appBar: searchBar.build(context),
-      body: Provider<User>(
-        create: (ctx) => args.user,
-        child: SingleChildScrollView(
-          child: futureSearch != null ? buildSearch(context)
-              : Column(
-                  children: [
-                    buildRecentlyWatched(context),
-                    buildNewSeason(context)
-                  ],
-          ),
+      body: SingleChildScrollView(
+        child: futureSearch != null ? buildSearch(context)
+            : Column(
+                children: [
+                  buildFeatured(),
+                  buildRecentlyWatched(context),
+                  buildNewSeason(context)
+                ],
         ),
       ),
     );
@@ -84,11 +88,14 @@ class _HomePageState extends State<HomePage> {
       builder: (context, snapshot){
         if(snapshot.hasData){
           return  snapshot.data!.isEmpty ? Container() : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('RECENTLY WATCHED', style: TextStyle(color: Colors.blue, fontSize: 23, fontWeight: FontWeight.bold),),
-              Consumer<User>(
-                builder: (context, user, _) => AnimeCarousel(animeList: snapshot.data!, user: user, infinite: false,),
-              )
+
+              const Padding(
+                  padding: EdgeInsets.fromLTRB(20, 10, 0, 0),
+                  child: Text('Recently watched', style: TextStyle(color: Colors.blue, fontSize: 23, fontWeight: FontWeight.bold))
+              ),
+              AnimeCarousel(animeList: snapshot.data!, user: user, infinite: false,)
             ],
           );
         }else if(snapshot.hasError){
@@ -106,11 +113,10 @@ class _HomePageState extends State<HomePage> {
      builder: (context, snapshot){
         if(snapshot.hasData){
           return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('NEW SEASON', style: TextStyle(color: Colors.blue, fontSize: 23, fontWeight: FontWeight.bold),),
-              Consumer<User>(
-                builder: (context, user, _) => AnimeCarousel(animeList: snapshot.data!, user: user),
-              )
+              Padding(padding: EdgeInsets.fromLTRB(20, 10, 0, 0),child: const Text('NEW SEASON', style: TextStyle(color: Colors.blue, fontSize: 23, fontWeight: FontWeight.bold))),
+              AnimeCarousel(animeList: snapshot.data!, user: user)
             ],
           );
         }else if(snapshot.hasError){
@@ -134,9 +140,7 @@ class _HomePageState extends State<HomePage> {
           for(var a in snapshot.data!){
             print('yes there is $a');
           }
-          return Consumer<User>(
-            builder: (context, user, _) => AnimeList(animeList: snapshot.data!, user: user),
-          );
+          return AnimeList(animeList: snapshot.data!, user: user);
         }else if(snapshot.hasError){
           return Card(
             child: Center(child: Text(snapshot.data.toString())),
@@ -149,9 +153,58 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-
   void onSearch(String query){
-    final args = ModalRoute.of(context)!.settings.arguments as HomePageArguments;
-    futureSearch = search(args.user, query);
+    futureSearch = search(query);
+  }
+
+  Widget buildFeatured() {
+    return FutureBuilder<Anime>(
+      future: futureFeatured,
+        builder: (context, snapshot){
+          if(snapshot.hasData){
+            Anime anime = snapshot.data!;
+            return Container(
+              height: 350,
+              child: GestureDetector(
+                onTap: (){
+                  Navigator.pushNamed(context, '/anime', arguments: AnimePageArguments(anime.id, user));
+                },
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    CachedNetworkImage(imageUrl: anime.coverUrl!, fit: BoxFit.cover),
+                    const DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment(0.0, 0.5),
+                          end: Alignment.center,
+                          colors: <Color>[
+                            Color(0xc0000000),
+                            Color(0x00000000),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      left: 10,
+                      bottom: 20,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text('Featured', style: TextStyle(fontSize: 15, color: Color.fromARGB(150, 255, 255, 255))),
+                            Text(anime.name, style: const TextStyle(fontSize: 20, color: Colors.white)),
+                          ],
+                        )
+                    )
+                  ],
+                ),
+              ),
+            );
+          }else if(snapshot.hasError){
+            //TODO
+          }
+          return const Center(child: CircularProgressIndicator());
+        }
+    );
   }
 }
