@@ -76,10 +76,14 @@ class User{
         'accept-language': 'fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7',
         'content-type': 'application/x-www-form-urlencoded',
         'cookie': "${gogoCookie.name}=${gogoCookie.value}",
+        'upgrade-insecure-requests': '1'
       }, body: data);
 
       // extract auth cookie for next requests
       setCookieHeader = resp.headers['set-cookie'];
+      print(url);
+      print(resp.body);
+      print(resp.headers);
       if(setCookieHeader == null)return Future.error('Invalid user or password');
       Cookie authCookie = Cookie.fromSetCookieValue(setCookieHeader);
 

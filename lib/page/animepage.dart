@@ -149,7 +149,9 @@ class _AnimePageState extends State<AnimePage> {
   void playButton(var ctx, Anime anime, int episode) {
     print("Starting playback of ${anime.name} episode $episode");
 
-    Future<List<StreamingUrl>> urls = anime.fetchStreamUrlXStreamCDN(widget.user, episode);
+    Future<List<StreamingUrl>> urls = anime.fetchStreamUrlXStreamCDN(widget.user, episode)
+      .onError((error, stackTrace) => anime.fetchStreamUrl(widget.user, episode));
+
 
     showDialog(
         context: context,

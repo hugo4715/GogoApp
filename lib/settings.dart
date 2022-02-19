@@ -1,1 +1,1 @@
-const String gogoDomain = "https://www4.gogoanime.cm";
+const String gogoDomain = "https://gogoanime.fi";

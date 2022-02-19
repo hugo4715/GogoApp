@@ -93,10 +93,9 @@ class _HomePageState extends State<HomePage> {
           return  snapshot.data!.isEmpty ? Container() : Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               const Padding(
                   padding: EdgeInsets.fromLTRB(20, 10, 0, 0),
-                  child: Text('Recently watched', style: TextStyle(color: Colors.blue, fontSize: 23, fontWeight: FontWeight.bold))
+                  child: Text('Recently watched', style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold))
               ),
               AnimeCarousel(animeList: snapshot.data!, user: user, infinite: false,)
             ],
@@ -118,7 +117,7 @@ class _HomePageState extends State<HomePage> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(padding: EdgeInsets.fromLTRB(20, 10, 0, 0),child: const Text('NEW SEASON', style: TextStyle(color: Colors.blue, fontSize: 23, fontWeight: FontWeight.bold))),
+              Padding(padding: EdgeInsets.fromLTRB(20, 10, 0, 0),child: const Text('New Season', style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold))),
               AnimeCarousel(animeList: snapshot.data!, user: user)
             ],
           );
