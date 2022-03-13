@@ -4,16 +4,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Clone custom chewie plugin
-        uses: actions/checkout@v2
-        with:
-          repository: hugo4715/plugins
-          path: 'plugins'
-      - name: Create symlink to plugins repo
-        run: ln -s $GITHUB_WORKSPACE/plugins ../plugins && ls -l ..
       - uses: actions/setup-java@v2
         with:
-          distribution: 'zulu'
+          distribution: 'adopt'
           java-version: '11'
       - uses: subosito/flutter-action@v2
         with:
@@ -21,5 +14,8 @@ jobs:
           cache-key: flutter # optional, change this to force refresh cache
           cache-path: ${{ runner.tool_cache }}/flutter # optional, change this to specify the cache path
       - run: flutter pub get
-      - run: flutter test
-      - run: flutter build apk
+      - run: flutter build apk --no-sound-null-safety
+      - uses: actions/upload-artifact@v3
+        with:
+          name: GogoApp.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
