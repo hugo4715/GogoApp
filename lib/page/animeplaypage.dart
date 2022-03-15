@@ -7,6 +7,7 @@ import 'package:gogo_app/data/watchlist.dart';
 import 'package:gogo_app/helper.dart';
 import 'package:gogo_app/widget/customcontrols.dart';
 import 'package:video_player/video_player.dart';
+import 'package:wakelock/wakelock.dart';
 
 import '../data/user.dart';
 
@@ -47,11 +48,13 @@ class _AnimePlayPageState extends State<AnimePlayPage> {
   void dispose() {
     _controller.dispose();
     chewieController.dispose();
+    Wakelock.disable();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    Wakelock.enable();
     return Scaffold(
       backgroundColor: const Color.fromARGB(1, 0, 0, 0),
       body: Center(
