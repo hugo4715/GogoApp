@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/hugo4715/GogoApp/compare/v1.0.1...v1.1.0) (2022-03-16)
+
+
+### Features
+
+* Added download buttons ([8931e5e](https://github.com/hugo4715/GogoApp/commit/8931e5e00151f4fcf4046e1fe43923359db29e2a))
+
 ## [1.0.1](https://github.com/hugo4715/GogoApp/compare/v1.0.0...v1.0.1) (2022-03-15)
 
 
