@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:gogo_app/page/animepage.dart';
 import 'package:gogo_app/page/homepage.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 
 import 'page/loginpage.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  FlutterDownloader.initialize(
+      debug: true // optional: set false to disable printing logs to console
+  );
+  FlutterDownloader.loadTasks();
+
   runApp(const GogoApp());
 }
 

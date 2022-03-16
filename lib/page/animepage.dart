@@ -9,11 +9,17 @@ import 'package:flutter_video_cast/flutter_video_cast.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gogo_app/data/anime.dart';
 import 'package:gogo_app/page/castpage.dart';
+import 'package:gogo_app/settings.dart';
 import 'package:gogo_app/widget/hiddentext.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:android_path_provider/android_path_provider.dart';
 
 import '../helper.dart';
 import 'animeplaypage.dart';
 import '../data/user.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:device_info/device_info.dart';
 
 class AnimePageArguments{
   final String animeId;
@@ -47,6 +53,11 @@ class _AnimePageState extends State<AnimePage> {
     super.initState();
     futureAnime = Anime.fetchById(widget.animeId);
     futureAnime.then(print);
+    FlutterDownloader.registerCallback(downloadCallback);
+  }
+
+  static void downloadCallback(String id, DownloadTaskStatus status, int progress) {
+    print('Background Isolate Callback: task ($id) is in status ($status) and process ($progress)');
   }
 
   @override
@@ -123,12 +134,19 @@ class _AnimePageState extends State<AnimePage> {
                           (BuildContext context, int index) {
                         return ListTile(
                           title: Text(anime.episodeName(index+1)),
-                          trailing: ElevatedButton(
-                            child: Text(_state == AppState.idle ? 'Play' : 'Cast'),
-                            onPressed: (){
-                              playButton(context, anime, index+1);
-                            },
-                          ),
+                          trailing: Wrap(
+                            children: [
+                              IconButton(onPressed: (){
+                                downloadButton(context, anime, index+1);
+                              }, icon: Icon(Icons.download)),
+                              ElevatedButton(
+                                child: Text(_state == AppState.idle ? 'Play' : 'Cast'),
+                                onPressed: (){
+                                  playButton(context, anime, index+1);
+                                },
+                              )
+                            ],
+                          )
                         );
                       },
                       childCount: anime.episodeCount,
@@ -143,6 +161,47 @@ class _AnimePageState extends State<AnimePage> {
           return const Center(child: CircularProgressIndicator());
         },
       ),
+    );
+  }
+  void downloadButton(var ctx, Anime anime, int episode) async {
+    var perm = await _checkPermission();
+    if(!perm){
+      showDialog(context: ctx, builder: (ctx){
+        return const AlertDialog(
+          title: Text("Cannot download episode!"),
+          content: Text("App needs the storage permission to download files."),
+        );
+      });
+      return;
+    }
+
+    Future<List<StreamingUrl>> urls = anime.fetchStreamUrlXStreamCDN(widget.user, episode)
+        .onError((error, stackTrace) => anime.fetchStreamUrl(widget.user, episode));
+
+    showDialog(
+        context: context,
+        builder: (ctx) {
+          return AlertDialog(
+            title: Text("Episode $episode - Quality"),
+            content: FutureBuilder<List<StreamingUrl>>(
+              future: urls,
+              builder: (ctx, snapshot){
+                if(snapshot.hasData){
+                  print('hasData=true');
+                  return Column(
+                    children: snapshot.data!.map((e) => ListTile(
+                      title: Text(e.quality),
+                      trailing: ElevatedButton(onPressed: (){download(anime, episode, e);}, child: Text('Download')),
+                    )).toList(),
+                  );
+                }else if(snapshot.hasError){
+                  return Text(snapshot.error.toString());
+                }
+                return const Center(child: CircularProgressIndicator(),);
+              },
+            ),
+          );
+        }
     );
   }
 
@@ -179,6 +238,18 @@ class _AnimePageState extends State<AnimePage> {
         }
     );
   }
+  void download(Anime anime, int episode, StreamingUrl url) async{
+    final taskId = await FlutterDownloader.enqueue(
+      url: await url.fetchMediaUrl(),
+      savedDir: await _getSaveDir(),
+      showNotification: true,
+      openFileFromNotification: true,
+      fileName: anime.name + ' - ' + episode.toString() + '.mp4',
+      headers: {
+        'Referer': gogoDomain
+      }
+    );
+  }
 
   void play(Anime anime, int episode, StreamingUrl url) async{
     var realUrl = await url.fetchMediaUrl();
@@ -195,7 +266,6 @@ class _AnimePageState extends State<AnimePage> {
       _controller.loadMedia(realUrl);
       Navigator.push(context, MaterialPageRoute(builder: (content) => CastPage(controller: _controller, anime: anime, playPause: _playPause, playing: _playing)));
     }
-
   }
 
   // CAST
@@ -228,6 +298,46 @@ class _AnimePageState extends State<AnimePage> {
     }
     setState(() => _playing = !playing);
   }
+
+  // FlutterDownloader plugin
+
+  Future<bool> _checkPermission() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    if (androidInfo.version.sdkInt <= 28) {
+      final status = await Permission.storage.status;
+      if (status != PermissionStatus.granted) {
+        final result = await Permission.storage.request();
+        if (result == PermissionStatus.granted) {
+          return true;
+        }
+      } else {
+        return true;
+      }
+    } else {
+      return true;
+    }
+    return false;
+  }
+
+  Future<String> _getSaveDir() async {
+    var path = (await _findLocalPath())!;
+    final savedDir = Directory(path);
+    bool hasExisted = await savedDir.exists();
+    if (!hasExisted) {
+      savedDir.create();
+    }
+    return path;
+  }
+
+  Future<String?> _findLocalPath() async {
+    try {
+      return await AndroidPathProvider.downloadsPath;
+    } catch (e) {
+      return (await getExternalStorageDirectory())?.path;
+    }
+  }
+
 }
 
 
