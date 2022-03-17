@@ -1,3 +1,15 @@
+# [1.2.0](https://github.com/hugo4715/GogoApp/compare/v1.1.0...v1.2.0) (2022-03-17)
+
+
+### Bug Fixes
+
+* Trim username in login ([bf71f98](https://github.com/hugo4715/GogoApp/commit/bf71f9867a4c8066c1f68d1fca4c0a98abb2a40b))
+
+
+### Features
+
+* Added analytics ([d459b8e](https://github.com/hugo4715/GogoApp/commit/d459b8ec524caf31ebe7c7b5c866f18348359197))
+
 # [1.1.0](https://github.com/hugo4715/GogoApp/compare/v1.0.1...v1.1.0) (2022-03-16)
 
 
