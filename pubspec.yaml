@@ -51,6 +51,7 @@ dependencies:
   permission_handler: ^9.0.2
   android_path_provider: ^0.3.0
   device_info: ^2.0.3
+  mixpanel_flutter: ^1.4.5
 dependency_overrides:
   video_player:
     git:

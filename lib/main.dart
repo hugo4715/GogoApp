@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:gogo_app/data/analytics.dart';
 import 'package:gogo_app/page/animepage.dart';
 import 'package:gogo_app/page/homepage.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-
+import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'page/loginpage.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  FlutterDownloader.initialize(
-      debug: true // optional: set false to disable printing logs to console
-  );
-  FlutterDownloader.loadTasks();
+  FlutterDownloader.initialize(debug: true)
+      .then((value) => FlutterDownloader.loadTasks());
 
   runApp(const GogoApp());
 }
@@ -20,6 +19,7 @@ class GogoApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    initMixpanel();
     return MaterialApp(
       title: 'GogoApp',
       initialRoute: '/login',

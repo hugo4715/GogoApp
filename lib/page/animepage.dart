@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_video_cast/flutter_video_cast.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gogo_app/data/analytics.dart';
 import 'package:gogo_app/data/anime.dart';
 import 'package:gogo_app/page/castpage.dart';
 import 'package:gogo_app/settings.dart';
@@ -239,6 +240,8 @@ class _AnimePageState extends State<AnimePage> {
     );
   }
   void download(Anime anime, int episode, StreamingUrl url) async{
+    mixpanel.track('download-anime');
+
     final taskId = await FlutterDownloader.enqueue(
       url: await url.fetchMediaUrl(),
       savedDir: await _getSaveDir(),
@@ -252,6 +255,8 @@ class _AnimePageState extends State<AnimePage> {
   }
 
   void play(Anime anime, int episode, StreamingUrl url) async{
+    mixpanel.track('play-anime');
+
     var realUrl = await url.fetchMediaUrl();
     if(_state == AppState.idle){
       Navigator.push(context, MaterialPageRoute(builder: (ctx) => AnimePlayPage(anime: anime, episode: episode, user: widget.user, url: realUrl)));
