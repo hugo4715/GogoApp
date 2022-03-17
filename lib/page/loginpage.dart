@@ -100,7 +100,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void loginButton() async{
     if(_formKey.currentState!.validate()){
-      var username = loginField.text;
+      var username = loginField.text.trim();
       var password = passwordField.text;
         setState(() {
           canType = false;

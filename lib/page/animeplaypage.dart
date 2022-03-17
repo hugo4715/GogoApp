@@ -41,7 +41,7 @@ class _AnimePlayPageState extends State<AnimePlayPage> {
       autoPlay: true,
       looping: true,
       fullScreenByDefault: true,
-      customControls: GogoControls()
+      customControls: const GogoControls()
     );
   }
 
