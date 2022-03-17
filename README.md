@@ -1,16 +1,14 @@
-# gogo_app
+# GogoAnime App
 
-A new Flutter application.
+An unofficial Android App for GogoAnime.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+[x] Login using a GogoAnime account
+[x] Watch and select quality
+[x] Cast on Smart tv (doesn't work on all animes but can't be fixed because of cast api limitations)
+[x] Show recently watched animes
+[x] Download animes
+[] Like animes on GogoAnime
+[] MAL/Anilist sync
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
