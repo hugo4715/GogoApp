@@ -10,14 +10,11 @@ import 'package:gogo_app/widget/customcontrols.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wakelock/wakelock.dart';
 
-import '../data/user.dart';
-
 class AnimePlayPage extends StatefulWidget {
-  final User user;
   final Anime anime;
   final int episode;
   final String url;
-  const AnimePlayPage({Key? key, required this.anime, required this.episode, required this.user, required this.url}) : super(key: key);
+  const AnimePlayPage({Key? key, required this.anime, required this.episode, required this.url}) : super(key: key);
 
   @override
   State<AnimePlayPage> createState() => _AnimePlayPageState();

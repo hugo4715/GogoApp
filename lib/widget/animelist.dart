@@ -5,9 +5,8 @@ import 'package:gogo_app/data/user.dart';
 import 'package:gogo_app/page/animepage.dart';
 
 class AnimeList extends StatelessWidget {
-  final User user;
   final List<Anime> animeList;
-  const AnimeList({Key? key, required this.animeList, required this.user}) : super(key: key);
+  const AnimeList({Key? key, required this.animeList}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +20,7 @@ class AnimeList extends StatelessWidget {
       children: animeList.map( (anime){
          return GestureDetector(
            onTap: (){
-             Navigator.pushNamed(context, '/anime', arguments: AnimePageArguments(anime.id , user));
+             Navigator.pushNamed(context, '/anime', arguments: AnimePageArguments(anime.id));
            },
            child: Stack(
              fit: StackFit.expand,

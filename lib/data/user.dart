@@ -5,6 +5,9 @@ import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as html_parser;
 import 'package:http/http.dart';
 
+late User user;
+var userLoaded = false;
+
 class User{
   static const secureStorage = FlutterSecureStorage();
 
@@ -26,17 +29,22 @@ class User{
 
   /// Tries to get a user object from a previous session. It also refreshes the cookie automatically if necessary
   static Future<User> getCachedUser() async{
+    if(userLoaded){
+      user = await refresh(user);
+      return user;
+    }
     if(await secureStorage.containsKey(key: 'email') && await secureStorage.containsKey(key: 'password') && await secureStorage.containsKey(key: 'cookie') && await secureStorage.containsKey(key: 'username')){
       var email = await secureStorage.read(key: 'email');
       var username = await secureStorage.read(key: 'username');
       var cookieString = await secureStorage.read(key: 'cookie');
       var cookie = Cookie.fromSetCookieValue(cookieString!);
-      var user = User(
+      user = User(
         email!,
         username!,
         cookie,
       );
       user = await refresh(user);
+      userLoaded = true;
       return user;
     }
     return Future.error('No user found in secure store');

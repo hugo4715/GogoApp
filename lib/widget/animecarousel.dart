@@ -7,9 +7,8 @@ import 'package:gogo_app/page/animepage.dart';
 
 class AnimeCarousel extends StatelessWidget {
   final List<Anime> animeList;
-  final User user;
   final bool infinite;
-  const AnimeCarousel({Key? key, required this.animeList, required this.user, this.infinite = true}) : super(key: key);
+  const AnimeCarousel({Key? key, required this.animeList, this.infinite = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +17,7 @@ class AnimeCarousel extends StatelessWidget {
       items: animeList.map((anime) {
         return GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, '/anime', arguments: AnimePageArguments(anime.id, user));
+            Navigator.pushNamed(context, '/anime', arguments: AnimePageArguments(anime.id));
           },
           child: Container(
             margin: const EdgeInsets.all(8.0),

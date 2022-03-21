@@ -53,7 +53,7 @@ class Anime {
     return 'Episode ${id}';
   }
 
-  Future<List<StreamingUrl>> fetchStreamUrlXStreamCDN(User user, int episode) async{
+  Future<List<StreamingUrl>> fetchStreamUrlXStreamCDN(int episode) async{
     print('fetchStreamUrlXStreamCDN ');
     try{
       var resp = await http.get(Uri.parse(gogoDomain + '/' + id + '-episode-' + episode.toString()), headers: {
@@ -93,7 +93,7 @@ class Anime {
     }
   }
 
-  Future<List<StreamingUrl>> fetchStreamUrl(User user, int episode) async{
+  Future<List<StreamingUrl>> fetchStreamUrl(int episode) async{
     print('fetchStreamUrl ');
     try{
       var resp = await http.get(Uri.parse(gogoDomain + '/' + id + '-episode-' + episode.toString()), headers: {

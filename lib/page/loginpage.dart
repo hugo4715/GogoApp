@@ -113,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void loginSuccess(User user){
     print('loginSuccess');
-    Navigator.pushReplacementNamed(context, '/home', arguments: HomePageArguments(user));
+    Navigator.pushReplacementNamed(context, '/home');
   }
 
   void loginError(var error){

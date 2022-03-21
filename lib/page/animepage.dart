@@ -24,9 +24,8 @@ import 'package:device_info/device_info.dart';
 
 class AnimePageArguments{
   final String animeId;
-  final User user;
 
-  AnimePageArguments(this.animeId, this.user);
+  AnimePageArguments(this.animeId);
 }
 
 class AnimePage extends StatefulWidget {
@@ -34,8 +33,7 @@ class AnimePage extends StatefulWidget {
   static const route = '/anime';
 
   final String animeId;
-  final User user;
-  const AnimePage({Key? key, required this.animeId, required this.user}) : super(key: key);
+  const AnimePage({Key? key, required this.animeId}) : super(key: key);
 
   @override
   State<AnimePage> createState() => _AnimePageState();
@@ -176,8 +174,8 @@ class _AnimePageState extends State<AnimePage> {
       return;
     }
 
-    Future<List<StreamingUrl>> urls = anime.fetchStreamUrlXStreamCDN(widget.user, episode)
-        .onError((error, stackTrace) => anime.fetchStreamUrl(widget.user, episode));
+    Future<List<StreamingUrl>> urls = anime.fetchStreamUrlXStreamCDN(episode)
+        .onError((error, stackTrace) => anime.fetchStreamUrl(episode));
 
     showDialog(
         context: context,
@@ -209,8 +207,8 @@ class _AnimePageState extends State<AnimePage> {
   void playButton(var ctx, Anime anime, int episode) {
     print("Starting playback of ${anime.name} episode $episode");
 
-    Future<List<StreamingUrl>> urls = anime.fetchStreamUrlXStreamCDN(widget.user, episode)
-      .onError((error, stackTrace) => anime.fetchStreamUrl(widget.user, episode));
+    Future<List<StreamingUrl>> urls = anime.fetchStreamUrlXStreamCDN(episode)
+      .onError((error, stackTrace) => anime.fetchStreamUrl(episode));
 
 
     showDialog(
@@ -259,7 +257,7 @@ class _AnimePageState extends State<AnimePage> {
 
     var realUrl = await url.fetchMediaUrl();
     if(_state == AppState.idle){
-      Navigator.push(context, MaterialPageRoute(builder: (ctx) => AnimePlayPage(anime: anime, episode: episode, user: widget.user, url: realUrl)));
+      Navigator.push(context, MaterialPageRoute(builder: (ctx) => AnimePlayPage(anime: anime, episode: episode, url: realUrl)));
     }else{
       // cast
       Fluttertoast.showToast(

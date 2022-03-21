@@ -15,12 +15,6 @@ import 'package:provider/provider.dart';
 import '../data/user.dart';
 import 'animepage.dart';
 
-class HomePageArguments{
-  final User user;
-
-  HomePageArguments(this.user);
-}
-
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -34,8 +28,6 @@ class _HomePageState extends State<HomePage> {
   late Future<List<Anime>> futureNewAnime;
   late Future<List<Anime>> futureRecentlyWatchedAnime;
   late Future<Anime> futureFeatured;
-
-  late User user;
 
   _HomePageState() {
     searchBar = SearchBar(
@@ -67,9 +59,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as HomePageArguments;
-    user = args.user;
-
     return Scaffold(
       appBar: searchBar.build(context),
       body: futureSearch != null ? buildSearch(context)
@@ -97,7 +86,7 @@ class _HomePageState extends State<HomePage> {
                   padding: EdgeInsets.fromLTRB(20, 10, 0, 0),
                   child: Text('Recently watched', style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold))
               ),
-              AnimeCarousel(animeList: snapshot.data!, user: user, infinite: false,)
+              AnimeCarousel(animeList: snapshot.data!, infinite: false,)
             ],
           );
         }else if(snapshot.hasError){
@@ -118,7 +107,7 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(padding: EdgeInsets.fromLTRB(20, 10, 0, 0),child: const Text('New Season', style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold))),
-              AnimeCarousel(animeList: snapshot.data!, user: user)
+              AnimeCarousel(animeList: snapshot.data!)
             ],
           );
         }else if(snapshot.hasError){
@@ -142,7 +131,7 @@ class _HomePageState extends State<HomePage> {
           for(var a in snapshot.data!){
             print('yes there is $a');
           }
-          return AnimeList(animeList: snapshot.data!, user: user);
+          return AnimeList(animeList: snapshot.data!);
         }else if(snapshot.hasError){
           return Card(
             child: Center(child: Text(snapshot.data.toString())),
@@ -169,7 +158,7 @@ class _HomePageState extends State<HomePage> {
               height: 350,
               child: GestureDetector(
                 onTap: (){
-                  Navigator.pushNamed(context, '/anime', arguments: AnimePageArguments(anime.id, user));
+                  Navigator.pushNamed(context, '/anime', arguments: AnimePageArguments(anime.id));
                 },
                 child: Stack(
                   fit: StackFit.expand,

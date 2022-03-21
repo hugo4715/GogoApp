@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:gogo_app/data/anime.dart';
-import 'package:gogo_app/data/user.dart';
 import 'package:gogo_app/helper.dart';
 import 'package:gogo_app/settings.dart';
 import 'package:http/http.dart' as http;
