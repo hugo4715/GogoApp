@@ -6,7 +6,6 @@
     '@semantic-release/commit-analyzer',
     '@semantic-release/release-notes-generator',
     '@semantic-release/changelog',
-    'semantic-release-dart',
     ['@semantic-release/git',{
       "assets": ["pubspec.yaml", "CHANGELOG.md"]
     }],

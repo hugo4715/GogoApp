@@ -8,24 +8,26 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '11'
+      - name: Install semantic release
+        run: npm install semantic-release @semantic-release/changelog @semantic-release/git rexreplace -g
+      - name: Find version from semantic release
+        run: echo "APP_VERSION=$(npx semantic-release --dryRun | grep -oP 'Published release \K.*? ')" >> $GITHUB_ENV
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Update version in pubspec.yaml
+        run: 'rexreplace "version: (.+)" "version: $APP_VERSION" pubspec.yaml'
       - uses: subosito/flutter-action@v2
         with:
           cache: true
-          cache-key: flutter # optional, change this to force refresh cache
-          cache-path: ${{ runner.tool_cache }}/flutter # optional, change this to specify the cache path
+          cache-key: flutter
+          cache-path: ${{ runner.tool_cache }}/flutter
       - run: flutter pub get
       - run: flutter build apk --no-sound-null-safety
       - uses: actions/upload-artifact@v3
         with:
           name: GogoApp.apk
           path: build/app/outputs/flutter-apk/app-release.apk
-      - name: Semantic Release
-        uses: cycjimmy/semantic-release-action@v3
+      - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          branch: master
-          extra_plugins: |
-            @semantic-release/changelog
-            @semantic-release/git
-            semantic-release-dart
+        run: semantic-release
