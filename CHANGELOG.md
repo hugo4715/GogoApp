@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/hugo4715/GogoApp/compare/v1.2.0...v1.3.0) (2022-03-22)
+
+
+### Features
+
+* Made the user global and load directly to home page ([2eb4cdb](https://github.com/hugo4715/GogoApp/commit/2eb4cdbe57404f1b33e419ebfa00fd6def4a3f28))
+
 # [1.2.0](https://github.com/hugo4715/GogoApp/compare/v1.1.0...v1.2.0) (2022-03-17)
 
 
