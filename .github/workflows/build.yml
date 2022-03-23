@@ -14,8 +14,11 @@ jobs:
         run: echo "APP_VERSION=$(npx semantic-release --dryRun | grep -oP 'Published release \K.*? ')" >> $GITHUB_ENV
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Cancel if no new version needed
+        uses: andymckay/cancel-action@0.2
+        if: ${{env.APP_VERSION == ''}}
       - name: Update version in pubspec.yaml
-        run: 'rexreplace "^version: (.+)" "version: $APP_VERSION" pubspec.yaml'
+        run: 'rexreplace "^version: (.+)" "version: $APP_VERSION+$GITHUB_RUN_ID" pubspec.yaml'
       - uses: subosito/flutter-action@v2
         with:
           cache: true
