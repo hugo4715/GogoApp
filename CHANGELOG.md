@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/hugo4715/GogoApp/compare/v1.3.0...v1.4.0) (2022-03-23)
+
+
+### Features
+
+* Added updater ([eb24b2d](https://github.com/hugo4715/GogoApp/commit/eb24b2d4aaa43ffa0d93ee9cc0b4b1f6cb4e2aa0))
+
 # [1.3.0](https://github.com/hugo4715/GogoApp/compare/v1.2.0...v1.3.0) (2022-03-22)
 
 
