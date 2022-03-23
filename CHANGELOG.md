@@ -1,3 +1,10 @@
+## [1.4.2](https://github.com/hugo4715/GogoApp/compare/v1.4.1...v1.4.2) (2022-03-23)
+
+
+### Bug Fixes
+
+* Create new version for testing ([93cde62](https://github.com/hugo4715/GogoApp/commit/93cde62d7bfe1b75fb14ce2b5d7dc059f63c8c2a))
+
 ## [1.4.1](https://github.com/hugo4715/GogoApp/compare/v1.4.0...v1.4.1) (2022-03-23)
 
 
