@@ -2,6 +2,7 @@
 
 An unofficial Android App for GogoAnime.
 
+[Download on the website](https://hugo4715.github.io/GogoAnime/)
 ## Features
 
 - [x] Login using a GogoAnime account
