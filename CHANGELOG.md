@@ -1,3 +1,11 @@
+## [1.4.1](https://github.com/hugo4715/GogoApp/compare/v1.4.0...v1.4.1) (2022-03-23)
+
+
+### Bug Fixes
+
+* Changed build id to use the Github Action run id ([9283cc5](https://github.com/hugo4715/GogoApp/commit/9283cc551ae6aa273fde3d09b7df49c828691784))
+* Trimmed grep version in build ([8b29945](https://github.com/hugo4715/GogoApp/commit/8b2994590ac1bb86ea7de3b0661a0a81fb0d428f))
+
 # [1.4.0](https://github.com/hugo4715/GogoApp/compare/v1.3.0...v1.4.0) (2022-03-23)
 
 
