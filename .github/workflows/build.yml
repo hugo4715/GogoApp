@@ -18,7 +18,7 @@ jobs:
         uses: andymckay/cancel-action@0.2
         if: ${{env.APP_VERSION == ''}}
       - name: Update version in pubspec.yaml
-        run: 'rexreplace "^version: (.+)" "version: $APP_VERSION+$GITHUB_RUN_ID" pubspec.yaml'
+        run: 'rexreplace "^version: (.+)" "version: $(echo $APP_VERSION | sed "s/ *$//g")+$GITHUB_RUN_ID" pubspec.yaml'
       - uses: subosito/flutter-action@v2
         with:
           cache: true
