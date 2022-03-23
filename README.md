@@ -1,4 +1,5 @@
 # GogoAnime App
+![Build](https://github.com/hugo4715/GogoApp/actions/workflows/build.yml/badge.svg)
 
 An unofficial Android App for GogoAnime.
 
