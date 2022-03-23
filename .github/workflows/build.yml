@@ -15,7 +15,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Update version in pubspec.yaml
-        run: 'rexreplace "version: (.+)" "version: $APP_VERSION" pubspec.yaml'
+        run: 'rexreplace "^version: (.+)" "version: $APP_VERSION" pubspec.yaml'
       - uses: subosito/flutter-action@v2
         with:
           cache: true
