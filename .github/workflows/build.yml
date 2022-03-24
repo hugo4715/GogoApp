@@ -26,10 +26,21 @@ jobs:
           cache-path: ${{ runner.tool_cache }}/flutter
       - run: flutter pub get
       - run: flutter build apk --no-sound-null-safety
+      - uses: r0adkll/sign-android-release@v1
+        name: Sign app APK
+        id: sign_app
+        with:
+          releaseDirectory: build/app/outputs/flutter-apk/
+          signingKeyBase64: ${{ secrets.KEYSTORE }}
+          alias: upload
+          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+        env:
+          # override default build-tools version (29.0.3) -- optional
+          BUILD_TOOLS_VERSION: "30.0.2"
       - uses: actions/upload-artifact@v3
         with:
           name: GogoApp.apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: ${{steps.sign_app.outputs.signedReleaseFile}}
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
