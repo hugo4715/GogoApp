@@ -1,3 +1,11 @@
+# [1.5.0](https://github.com/hugo4715/GogoApp/compare/v1.4.6...v1.5.0) (2022-03-24)
+
+
+### Features
+
+* Set app icon ([8a40147](https://github.com/hugo4715/GogoApp/commit/8a4014751e2adaf0fd79bf50335b2145e90bd3c8))
+* Set name of the app ([ea9660d](https://github.com/hugo4715/GogoApp/commit/ea9660d619de3de7a9a2e9019171f26977f50e11))
+
 ## [1.4.6](https://github.com/hugo4715/GogoApp/compare/v1.4.5...v1.4.6) (2022-03-24)
 
 
