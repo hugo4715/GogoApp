@@ -1,3 +1,10 @@
+## [1.4.6](https://github.com/hugo4715/GogoApp/compare/v1.4.5...v1.4.6) (2022-03-24)
+
+
+### Bug Fixes
+
+* Redirected to login instead of home when the later button in the updater is clicked ([a94d8f7](https://github.com/hugo4715/GogoApp/commit/a94d8f7f63ff29e537b539cd1454a2853e912dc8))
+
 ## [1.4.5](https://github.com/hugo4715/GogoApp/compare/v1.4.4...v1.4.5) (2022-03-24)
 
 
