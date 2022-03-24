@@ -46,8 +46,7 @@ class _UpdatePageState extends State<UpdatePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text('An update is available! \n' +
-                'Version ' + widget.update!.version.toString() + '\n\n' +
-                '(Uninstall the app before installing the new APK)',
+                'Version ' + widget.update!.version.toString() + '\n',
                 textAlign: TextAlign.center
             ),
             Row(

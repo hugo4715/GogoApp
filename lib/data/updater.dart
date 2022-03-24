@@ -28,7 +28,7 @@ Future<UpdateInfo?> checkUpdates() async{
 
     // check updates once a day
     if(last.add(const Duration(days: 1)).isAfter(now)){
-      shouldCheckUpdates = true;
+      shouldCheckUpdates = false;
       print('Skipped upates since we already checked today');
     }
   }
