@@ -63,7 +63,7 @@ class _UpdatePageState extends State<UpdatePage> {
   }
 
   void laterButton(context){
-    Navigator.pushReplacementNamed(context, "/home");
+    Navigator.pushReplacementNamed(context, "/login");
   }
 
   void updateButton() async{
