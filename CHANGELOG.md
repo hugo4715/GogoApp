@@ -1,3 +1,10 @@
+## [1.4.3](https://github.com/hugo4715/GogoApp/compare/v1.4.2...v1.4.3) (2022-03-24)
+
+
+### Bug Fixes
+
+* Signed app ([265999e](https://github.com/hugo4715/GogoApp/commit/265999e1caf159d62dd4cac495f89c1b9c19bf38))
+
 ## [1.4.2](https://github.com/hugo4715/GogoApp/compare/v1.4.1...v1.4.2) (2022-03-23)
 
 
