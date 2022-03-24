@@ -1,3 +1,10 @@
+## [1.4.5](https://github.com/hugo4715/GogoApp/compare/v1.4.4...v1.4.5) (2022-03-24)
+
+
+### Bug Fixes
+
+* Corrected build and auto updater - resolved [#2](https://github.com/hugo4715/GogoApp/issues/2) ([d20889c](https://github.com/hugo4715/GogoApp/commit/d20889c71dca5c8d96e75c47a8d50249438fa8fe))
+
 ## [1.4.4](https://github.com/hugo4715/GogoApp/compare/v1.4.3...v1.4.4) (2022-03-24)
 
 
