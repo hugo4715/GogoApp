@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/hugo4715/GogoApp/compare/v1.5.0...v1.6.0) (2022-03-25)
+
+
+### Features
+
+* Added animation to navigation ([bd9d1c7](https://github.com/hugo4715/GogoApp/commit/bd9d1c7d5ba6f7933c9262b7af70dfd32b00502d))
+
 # [1.5.0](https://github.com/hugo4715/GogoApp/compare/v1.4.6...v1.5.0) (2022-03-24)
 
 
