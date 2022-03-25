@@ -17,46 +17,52 @@ class AnimeCarousel extends StatelessWidget {
       items: animeList.map((anime) {
         return GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, '/anime', arguments: AnimePageArguments(anime.id));
+            Navigator.push(context, MaterialPageRoute(builder: (ctx) => AnimePage(anime: anime)));
           },
           child: Container(
             margin: const EdgeInsets.all(8.0),
             child: ClipRRect(
               borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-              child: Stack(
-                children: [
-                  DecoratedBox(
-                    position: DecorationPosition.foreground,
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment(0.0, 0.5),
-                        end: Alignment.center,
-                        colors: <Color>[
-                          Color(0xa0000000),
-                          Color(0x00000000),
-                        ],
+              child: Hero(
+                tag: 'anime-' + anime.id,
+                child: Stack(
+                  children: [
+                    DecoratedBox(
+                      position: DecorationPosition.foreground,
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment(0.0, 0.5),
+                          end: Alignment.center,
+                          colors: <Color>[
+                            Color(0xa0000000),
+                            Color(0x00000000),
+                          ],
+                        ),
+                      ),
+                      child: CachedNetworkImage(
+                          imageUrl: anime.coverUrl!,
+                          fit: BoxFit.cover,
+                          width: double.maxFinite
                       ),
                     ),
-                    child: CachedNetworkImage(
-                        imageUrl: anime.coverUrl!,
-                        fit: BoxFit.cover,
-                        width: double.maxFinite
-                    ),
-                  ),
-                  Positioned(
-                    width: 250,
-                    bottom: 10,
-                    left: 10,
-                    child: Text(
-                      anime.name,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 20
+                    Positioned(
+                      width: 250,
+                      bottom: 10,
+                      left: 10,
+                      child: DefaultTextStyle(
+                        style: const TextStyle(),
+                        child: Text(
+                          anime.name,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 20
+                          ),
+                        ),
                       ),
                     ),
-                  ),
 
-                ],
+                  ],
+                ),
               ),
             ),
           ),

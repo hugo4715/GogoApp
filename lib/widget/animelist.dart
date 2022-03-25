@@ -20,7 +20,7 @@ class AnimeList extends StatelessWidget {
       children: animeList.map( (anime){
          return GestureDetector(
            onTap: (){
-             Navigator.pushNamed(context, '/anime', arguments: AnimePageArguments(anime.id));
+             Navigator.push(context, MaterialPageRoute(builder: (ctx) => AnimePage(anime: anime)));
            },
            child: Stack(
              fit: StackFit.expand,

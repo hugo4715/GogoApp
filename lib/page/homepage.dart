@@ -158,36 +158,42 @@ class _HomePageState extends State<HomePage> {
               height: 350,
               child: GestureDetector(
                 onTap: (){
-                  Navigator.pushNamed(context, '/anime', arguments: AnimePageArguments(anime.id));
+                  Navigator.push(context, MaterialPageRoute(builder: (ctx) => AnimePage(anime: anime)));
                 },
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    CachedNetworkImage(imageUrl: anime.coverUrl!, fit: BoxFit.cover),
-                    const DecoratedBox(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment(0.0, 0.5),
-                          end: Alignment.center,
-                          colors: <Color>[
-                            Color(0xc0000000),
-                            Color(0x00000000),
-                          ],
+                child: Hero(
+                  tag: 'anime-' + anime.id,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      CachedNetworkImage(imageUrl: anime.coverUrl!, fit: BoxFit.cover),
+                      const DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment(0.0, 0.5),
+                            end: Alignment.center,
+                            colors: <Color>[
+                              Color(0xc0000000),
+                              Color(0x00000000),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    Positioned(
-                      left: 10,
-                      bottom: 20,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text('Featured', style: TextStyle(fontSize: 15, color: Color.fromARGB(150, 255, 255, 255))),
-                            Text(anime.name, style: const TextStyle(fontSize: 20, color: Colors.white)),
-                          ],
-                        )
-                    )
-                  ],
+                      Positioned(
+                        left: 10,
+                        bottom: 20,
+                          child: DefaultTextStyle(
+                            style: const TextStyle(),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text('Featured', style: TextStyle(fontSize: 15, color: Color.fromARGB(150, 255, 255, 255))),
+                                Text(anime.name, style: const TextStyle(fontSize: 20, color: Colors.white)),
+                              ],
+                            ),
+                          )
+                      )
+                    ],
+                  ),
                 ),
               ),
             );

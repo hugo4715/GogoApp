@@ -59,19 +59,7 @@ class GogoApp extends StatelessWidget {
         '/home': (ctx) => const HomePage(),
         '/login': (ctx) => const LoginPage(),
         '/update': (ctx) => UpdatePage(update),
-      },
-      onGenerateRoute: (settings){
-        if(settings.name == AnimePage.route){
-          final args = settings.arguments as AnimePageArguments;
-          return MaterialPageRoute(
-            builder: (context) {
-              return AnimePage(
-                animeId: args.animeId,
-              );
-            },
-          );
-        }
-      },
+      }
     );
   }
 }
