@@ -2,8 +2,9 @@
 ![Build](https://github.com/hugo4715/GogoApp/actions/workflows/build.yml/badge.svg)
 
 An unofficial Android App for GogoAnime.
-
 [Download on the website](https://hugo4715.github.io/GogoAnime/)
+
+![](https://hugo4715.github.io/GogoAnime/_nuxt/img/screenshot1.68a0fd2.png)
 ## Features
 
 - [x] Login using a GogoAnime account
